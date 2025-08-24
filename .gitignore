@@ -8,15 +8,25 @@
 !.env.example
 
 !mosquitto/mosquitto.conf
+
 !pingexporter/config/config.yml
+
 !prometheus/config/prometheus.yml
+
 !telegraf/
 !telegraf/Dockerfile
 !telegraf/telegraf-ipmitool.sh
 !telegraf/telegraf.conf
 !telegraf/telegraf.d/
 !telegraf/telegraf.d/**
+
 !unpoller/up.conf
+
+!nginx/
+!nginx/data/
+!nginx/data/nginx/
+!nginx/data/nginx/custom/
+!nginx/data/nginx/custom/**
 
 
 # Aber explizit NICHT tracken:
