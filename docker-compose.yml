@@ -1,0 +1,215 @@
+version: "3.8"
+services:
+  nginx-proxy-mamager:
+    container_name: "nginx-mon"
+    image: "jc21/nginx-proxy-manager"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      - ./nginx/data:/data
+      - ./nginx/letsencrypt:/etc/letsencrypt
+
+  uptime-kuma:
+    container_name: "kuma"
+    image: "louislam/uptime-kuma:latest"
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./kuma/data:/app/data
+
+  grafana:
+    container_name: "grafana"
+    image: "grafana/grafana"
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    user: "1000"
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+
+  influxdb:
+    container_name: "influxdb"
+    image: "influxdb:latest"
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./influxdb:/var/lib/influxdb2
+
+  telegraf:
+    env_file: [.env]
+    container_name: "telegraf"
+    build: "./telegraf"
+    restart: unless-stopped
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ./telegraf/telegraf.d/:/etc/telegraf/telegraf.d:ro
+      - ./telegraf/mibs:/usr/share/snmp/mibs
+      - /proc:/rootfs/proc:ro
+      - /sys:/rootfs/sys:ro
+      - /etc:/rootfs/etc:ro
+    environment:
+      - HOST_PROC=/rootfs/proc
+      - HOST_SYS=/rootfs/sys
+      - HOST_ETC=/rootfs/etc
+      - IPMI_USERNAME=${IPMI_USERNAME}
+      - IPMI_PASSWORD=${IPMI_PASSWORD}
+      - BROCADE_AUTH_PASS=${BROCADE_AUTH_PASS}
+      - BROCADE_PRIV_PASS=${BROCADE_PRIV_PASS}
+      - EDGEROUTER_AUTH_PASS=${EDGEROUTER_AUTH_PASS}
+      - EDGEROUTER_PRIV_PASS=${EDGEROUTER_PRIV_PASS}
+      - INDLUXDB_NETWORK=${INFLUXDB_NETWORK}
+      - INDLUXDB_SERVER=${INFLUXDB_SERVER}
+    command: >
+      --config /etc/telegraf/telegraf.conf
+      --config-directory /etc/telegraf/telegraf.d
+
+  prometheus:
+    container_name: "prometheus"
+    image: "prom/prometheus"
+    restart: unless-stopped
+    user: "1000"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data:/prometheus
+    command:
+     - --config.file=/etc/prometheus/prometheus.yml
+     - --storage.tsdb.retention.time=10y
+     - --storage.tsdb.retention.size=0
+#     - --storage.tsdb.path=/var/lib/prometheus
+     - --web.enable-lifecycle
+
+  node-exporter:
+    container_name: "node-exporter"
+    image: "prom/node-exporter"
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+
+  graphite:
+    container_name: "graphite"
+    image: "graphiteapp/graphite-statsd"
+    restart: unless-stopped
+    ports:
+      - "2003:2003"
+      - "8080:8080"
+
+  unpoller:
+    container_name: "unpoller"
+    image: "ghcr.io/unpoller/unpoller"
+    restart: unless-stopped
+    volumes:
+      - ./unpoller/up.conf:/etc/unpoller/up.conf
+
+  ping-exporter:
+    container_name: "ping-exporter"
+    image: "czerwonk/ping_exporter"
+    restart: unless-stopped
+    volumes:
+      - ./pingexporter/config:/config:ro
+
+  mosquitto:
+    container_name: "mosquitto"
+    image: "eclipse-mosquitto"
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto:/etc/mosquitto
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+#  p110-exporter-rack:
+#    env_file: [.env]
+#    container_name: "p110-exporter-rack"
+#    image: "ghcr.io/fabianliske/p110-exporter:latest"
+#    restart: unless-stopped
+#    environment:
+#      - INFLUX_TOKEN=${INFLUXDB_STROM}
+#      - INFLUX_ORG=heimnetz-monitor
+#      - INFLUX_BUCKET=strom
+#      - INFLUX_IP=192.168.10.100
+#      - INFLUX_PORT=8086
+#      - TAPO_USERNAME=${TAPO_USERNAME}
+#      - TAPO_PASSWORD=${TAPO_PASSWORD}
+#      - TAPO_IP=192.168.107.11
+#      - DEVICE_NAME=rack
+#
+#  p110-exporter-schreibtisch:
+#    env_file: [.env]
+#    container_name: "p110-exporter-schreibtisch"
+#    image: "ghcr.io/fabianliske/p110-exporter:latest"
+#    restart: unless-stopped
+#    environment:
+#      - INFLUX_TOKEN=${INFLUXDB_STROM}
+#      - INFLUX_ORG=heimnetz-monitor
+#      - INFLUX_BUCKET=strom
+#      - INFLUX_IP=192.168.10.100
+#      - INFLUX_PORT=8086
+#      - TAPO_USERNAME=${TAPO_USERNAME}
+#      - TAPO_PASSWORD=${TAPO_PASSWORD}
+#      - TAPO_IP=192.168.107.13
+#      - DEVICE_NAME=schreibtisch
+#
+#  p110-exporter-tv:
+#    env_file: [.env]
+#    container_name: "p110-exporter-tv"
+#    image: "ghcr.io/fabianliske/p110-exporter:latest"
+#    restart: unless-stopped
+#    environment:
+#      - INFLUX_TOKEN=${INFLUXDB_STROM}
+#      - INFLUX_ORG=heimnetz-monitor
+#      - INFLUX_BUCKET=strom
+#      - INFLUX_IP=192.168.10.100
+#      - INFLUX_PORT=8086
+#      - TAPO_USERNAME=${TAPO_USERNAME}
+#      - TAPO_PASSWORD=${TAPO_PASSWORD}
+#      - TAPO_IP=192.168.107.12
+#      - DEVICE_NAME=tv
+#
+#  p110-exporter-sideboard:
+#    env_file: [.env]
+#    container_name: "p110-exporter-sideboard"
+#    image: "ghcr.io/fabianliske/p110-exporter:latest"
+#    restart: unless-stopped
+#    environment:
+#      - INFLUX_TOKEN=${INFLUXDB_STROM}
+#      - INFLUX_ORG=heimnetz-monitor
+#      - INFLUX_BUCKET=strom
+#      - INFLUX_IP=192.168.10.100
+#      - INFLUX_PORT=8086
+#      - TAPO_USERNAME=${TAPO_USERNAME}
+#      - TAPO_PASSWORD=${TAPO_PASSWORD}
+#      - TAPO_IP=192.168.107.14
+#      - DEVICE_NAME=sideboard
+#
+#  p110-exporter-stehlampe:
+#    env_file: [.env]
+#    container_name: "p110-exporter-stehlampe"
+#    image: "ghcr.io/fabianliske/p110-exporter:latest"
+#    restart: unless-stopped
+#    environment:
+#      - INFLUX_TOKEN=${INFLUXDB_STROM}
+#      - INFLUX_ORG=heimnetz-monitor
+#      - INFLUX_BUCKET=strom
+#      - INFLUX_IP=192.168.10.100
+#      - INFLUX_PORT=8086
+#      - TAPO_USERNAME=${TAPO_USERNAME}
+#      - TAPO_PASSWORD=${TAPO_PASSWORD}
+#      - TAPO_IP=192.168.107.6
+#      - DEVICE_NAME=stehlampe

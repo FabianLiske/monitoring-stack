@@ -1,0 +1,22 @@
+# Ignoriere alles
+*
+
+# Konfigs und relevante Unterordner explizit einbeziehen
+!docker-compose.yml
+!README.md
+!.gitignore
+!.env.example
+
+!mosquitto/mosquitto.conf
+!pingexporter/config/config.yml
+!prometheus/config/prometheus.yml
+!telegraf/
+!telegraf/Dockerfile
+!telegraf/telegraf-ipmitool.sh
+!telegraf/telegraf.conf
+!telegraf/telegraf.d/
+!telegraf/telegraf.d/**
+!unpoller/up.conf
+
+
+# Aber explizit NICHT tracken:
