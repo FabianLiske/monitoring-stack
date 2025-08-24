@@ -54,6 +54,7 @@ services:
       - /proc:/rootfs/proc:ro
       - /sys:/rootfs/sys:ro
       - /etc:/rootfs/etc:ro
+      - ./nginx/data/logs:/var/log/npm:ro
     environment:
       - HOST_PROC=/rootfs/proc
       - HOST_SYS=/rootfs/sys
@@ -66,6 +67,7 @@ services:
       - EDGEROUTER_PRIV_PASS=${EDGEROUTER_PRIV_PASS}
       - INDLUXDB_NETWORK=${INFLUXDB_NETWORK}
       - INDLUXDB_SERVER=${INFLUXDB_SERVER}
+      - INDLUXDB_SERVICE=${INFLUXDB_SERVICE}
     command: >
       --config /etc/telegraf/telegraf.conf
       --config-directory /etc/telegraf/telegraf.d
