@@ -32,6 +32,10 @@ services:
       - ./grafana:/var/lib/grafana
     environment:
       - GF_INSTALL_PLUGINS=grafana-clock-panel
+    depends_on:
+      - influxdb
+      - prometheus
+      - graphite
 
   influxdb:
     container_name: "influxdb"
@@ -72,6 +76,8 @@ services:
     command: >
       --config /etc/telegraf/telegraf.conf
       --config-directory /etc/telegraf/telegraf.d
+    depends_on:
+      - influxdb
 
   prometheus:
     container_name: "prometheus"
