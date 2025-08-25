@@ -43,6 +43,7 @@ services:
       - ./influxdb:/var/lib/influxdb2
 
   telegraf:
+    user: "0:0"
     env_file: [.env]
     container_name: "telegraf"
     build: "./telegraf"
