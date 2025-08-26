@@ -28,5 +28,8 @@
 !nginx/data/nginx/custom/
 !nginx/data/nginx/custom/**
 
+!mongo/
+!mongo/init-mongo.sh
+
 
 # Aber explizit NICHT tracken:
