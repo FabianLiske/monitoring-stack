@@ -83,6 +83,7 @@ services:
       - influxdb
 
   prometheus:
+    env_file: [.env]
     container_name: "prometheus"
     image: "prom/prometheus"
     restart: unless-stopped

@@ -24,7 +24,7 @@ scrape_configs:
   - job_name: "Ping"
     static_configs:
       - targets: ["ping-exporter:9427"]
-      
+
   # pi5-02 (torrent box)
   - job_name: "pi5-02"
     static_configs:
@@ -34,11 +34,11 @@ scrape_configs:
   - job_name: "pihole"
     static_configs:
       - targets: ["pihole-exporter.service.rohrbom.be"]
-      
+
   - job_name: "pi5-03"
     static_configs:
       - targets: ["node-exporter.service.rohrbom.be"]
-      
+
   # pi4-01 (DMZ Pi)
   - job_name: "pi4-01"
     static_configs:
@@ -46,7 +46,6 @@ scrape_configs:
 
   # Uptime Kuma
   - job_name: "uptime-kuma"
-    metrics_path: /metrics
     static_configs:
       - targets: ["uptime-kuma:3001"]
     basic_auth:
