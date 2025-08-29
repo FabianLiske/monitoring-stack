@@ -158,6 +158,11 @@ services:
       - ./mongo/data:/data/db
       - ./mongo/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   unifi-network:
     env_file: [.env]
