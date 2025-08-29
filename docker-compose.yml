@@ -49,6 +49,9 @@ services:
   telegraf:
     user: "0:0"
     env_file: [.env]
+    dns:
+      - 192.168.20.3
+      - 1.1.1.1
     container_name: "telegraf"
     build: "./telegraf"
     restart: unless-stopped

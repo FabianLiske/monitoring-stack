@@ -1,0 +1,16 @@
+[[inputs.x509_cert]]
+  interval = "12h"
+  timeout  = "5s"
+  name_override = "tls_cert"
+  sources = [
+    "https://proxy.mon.rohrbom.be",
+    "https://ld.rohrbom.be",
+    "https://pdf.rohrbom.be",
+    "https://pihole.rohrbom.be",
+    "https://proxy.rohrbom.be",
+    "https://trilium.rohrbom.be",
+    "https://wiki.rohrbom.be",
+    "https://vault.rohrbom.be",
+  ]
+  [inputs.x509_cert.tags]
+    domain = "network"
