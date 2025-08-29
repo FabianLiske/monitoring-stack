@@ -43,3 +43,11 @@ scrape_configs:
   - job_name: "pi4-01"
     static_configs:
       - targets: ["192.168.30.2:9100"]
+
+  # Uptime Kuma
+  - job_name: "uptime-kuma"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["uptime-kuma:3001"]
+    basic_auth:
+      password: "${KUMA_API_KEY}"
