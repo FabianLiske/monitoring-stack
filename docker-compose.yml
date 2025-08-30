@@ -144,8 +144,6 @@ services:
       - QBITTORRENT_BASE_URL=http://192.168.1.7:8080
       - QBITTORRENT_PASSWORD=${QBITTORRENT_PASSWORD}
       - QBITTORRENT_USERNAME=${QBITTORRENT_USERNAME}
-    ports:
-      - 8090:8090
     restart: unless-stopped
 
   mosquitto:
