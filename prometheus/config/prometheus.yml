@@ -30,6 +30,10 @@ scrape_configs:
     static_configs:
       - targets: ["node-exporter.tbox.rohrbom.be"]
 
+  - job_name: "qbittorrent"
+    static_configs:
+      - targets: ["qbittorrent-exporter:8090"]
+
   # pi5-03 (service-pi)
   - job_name: "pihole"
     static_configs:
