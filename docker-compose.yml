@@ -58,7 +58,9 @@ services:
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - ./telegraf/telegraf.d/:/etc/telegraf/telegraf.d:ro
-      - ./telegraf/mibs:/usr/share/snmp/mibs
+      - /usr/share/snmp/mibs/ietf:/mibs/ietf:ro
+      - /usr/share/snmp/mibs/iana:/mibs/iana:ro
+      - /usr/share/snmp/mibs/net-snmp:/mibs/net-snmp:ro
       - /proc:/rootfs/proc:ro
       - /sys:/rootfs/sys:ro
       - /etc:/rootfs/etc:ro
