@@ -203,6 +203,12 @@ services:
       - "8080:8080"
     restart: unless-stopped
 
+  speedtest:
+    image: ghcr.io/miguelndecarvalho/speedtest-exporter:latest
+    container_name: speedtest
+    restart: unless-stopped
+
+
 #  p110-exporter-rack:
 #    env_file: [.env]
 #    container_name: "p110-exporter-rack"

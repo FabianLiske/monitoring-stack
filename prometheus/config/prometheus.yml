@@ -63,3 +63,11 @@ scrape_configs:
       - targets: ["uptime-kuma:3001"]
     basic_auth:
       password: "uk1_3tLt5tb2Z8sYIkq2Kq2CU85-0oUsDcfHYKLPG-ZT"
+
+  # Speedtest
+  - job_name: "speedtest"
+    scrape_interval: 15m
+    scrape_timout: 2m
+    static_configs:
+      - targets: ["speedtest:9798"]
+
