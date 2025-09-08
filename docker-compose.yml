@@ -123,6 +123,9 @@ services:
     ports:
       - "2003:2003"
       - "8081:8080"
+    volumes:
+      - ./graphite/conf:/opt/graphite/conf
+      - ./graphite/storage:/opt/graphite/storage
 
   unpoller:
     container_name: "unpoller"

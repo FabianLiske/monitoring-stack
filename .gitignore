@@ -20,6 +20,10 @@
 !telegraf/telegraf.d/
 !telegraf/telegraf.d/**
 
+!graphite/
+!graphite/conf/
+!graphite/conf/**
+
 !unpoller/up.conf
 
 !nginx/
