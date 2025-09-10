@@ -12,6 +12,10 @@ scrape_configs:
     static_configs:
       - targets: ["prometheus:9090"]
 
+  - job_name: "influxdb"
+    static_configs:
+      - targets: ["influxdb:8086"]
+
   # pi5-01 (monitoring pi)
   - job_name: "pi5-01"
     static_configs:

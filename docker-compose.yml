@@ -125,7 +125,7 @@ services:
       - "2003:2003"
       - "8081:8080"
     volumes:
-      - ./graphite/conf:/opt/graphite/conf
+      - ./graphite/conf/storage-schemas.conf:/opt/graphite/conf/storage-schemas.conf:ro
       - ./graphite/storage:/opt/graphite/storage
 
   unpoller:
