@@ -41,7 +41,7 @@ scrape_configs:
   # pi5-03 (service-pi)
   - job_name: "pihole"
     static_configs:
-      - targets: ["pihole-exporter.service.rohrbom.be"]
+      - targets: ["pihole-exporter.service.rohrbom.be", "192.168.20.2:9617"]
 
   - job_name: "pi5-03"
     static_configs:
@@ -74,3 +74,8 @@ scrape_configs:
     scrape_timeout: 2m
     static_configs:
       - targets: ["speedtest:9798"]
+
+  # PiHole LXC
+  - job_name: "pihole-lxc"
+    static_configs:
+      - targets: ["192.168.20.2:9100"]
